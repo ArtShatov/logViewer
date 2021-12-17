@@ -1,26 +1,40 @@
 <?php
 require_once '../app/config.php';
 require_once '../app/src/library/db.php';
+require_once '../app/src/library/template.php';
 require_once '../app/src/library/request.php';
 
 $db = new DB(DB_HOST , DB_USER , DB_PASSWORD , DB_DATABASE);
 $request = new Request();
 
 //Ищем установленные компоненты
-$avalibleComponents  = scandir('../app/src/components/');
-foreach ($avalibleComponents as $index => $value) {
+$availableComponents  = scandir('../app/src/components/');
+foreach ($availableComponents as $index => $value) {
     if (in_array($value , array('.', '..'))) {
-        unset($avalibleComponents[$index]);
+        unset($availableComponents[$index]);
     }
 }
 
 $component = ((isset($request->get['component']) and ($request->get['component'] !=='')) ? $request->get['component'] : DEFAULT_COMPONENT);
 $action = ((isset($request->get['action']) and ($request->get['action'] !=='')) ? $request->get['action'] : 'index');
 
-if (!in_array($component , $avalibleComponents)) {
+if (!in_array($component , $availableComponents)) {
     $component = 'error';
     $action = 'index';
 }
+$model = null;
+//Проверяю существует ли модель и создаю. Внутрь передаю коннектор к бд
+$modelFileName = '../app/src/components/' . $component . '/model.php';
+if (file_exists($modelFileName)) {
+    require_once $modelFileName;
+    $modelClassName = $component . 'Model';
+    if (class_exists($modelClassName)) {
+        $model = new $modelClassName([
+            'db' => $db
+        ]);
+    }
+}
+
 $controllerFileName = '../app/src/components/' . $component . '/controller.php';
 
 require_once $controllerFileName;
@@ -28,13 +42,15 @@ if (!file_exists($controllerFileName)) {
     die('Error: Could not load controller: ' . $controllerFileName);
 }
 
-$clasName = $component . 'Controller';
+$ControllerClassName = $component . 'Controller';
 
-if (!class_exists($clasName)) {
-    die('Error: Class not exists: ' . $clasName);
+if (!class_exists($ControllerClassName)) {
+    die('Error: Class not exists: ' . $ControllerClassName);
 }
 
-//Создаем модель, в нее инжектим коннектор БД
-//Создаем контроллер. В него инжектим Реквест, Модель.
+$controller = new $ControllerClassName([
+    'model'  => $model,
+    'request' => $request
+]);
 
-//$controller = new ();
+$controller->$action();
