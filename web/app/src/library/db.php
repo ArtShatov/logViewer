@@ -16,6 +16,10 @@ class DB {
         if(!($query_result = mysqli_query($this->connector , $sql))) {
             die(mysqli_error($this->connector));
         }
+        if(is_bool($query_result)) {
+            return $query_result;
+        }
+
         $rows = array();
 
         while ($row = mysqli_fetch_assoc($query_result)) {

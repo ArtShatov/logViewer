@@ -6,6 +6,6 @@
 </head>
 <body>
     строка успешно добавлена <br>
-    <a href="/">В список событий</a> или <a href="/?action=form">Добавить еще</a>
+    <a href="/index.php?component=logviewer">В список событий</a> или <a href="/index.php?component=logviewer&action=form">Добавить еще</a>
 </body>
 </html>

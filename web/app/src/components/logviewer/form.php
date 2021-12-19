@@ -29,6 +29,7 @@
                 </td>
             </tr>
         </table>
+        <input type="hidden" value="logviewer" />
         <input type="submit" value="Сохранить" />
     </form>
 </body>

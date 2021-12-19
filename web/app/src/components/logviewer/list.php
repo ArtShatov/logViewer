@@ -5,6 +5,12 @@
     <title>Вывод логов</title>
 </head>
 <body>
+<?php
+$url = "/index.php?component=logviewer";
+foreach ($filters as $key => $val) {
+    $url .= "&filters[" . $key . "]=" . $val;
+}
+?>
 <table border="1">
     <?php $hrow = ($orderby == 'DESC') ? '&#8595;':'&#8593;';?>
     <thead>
@@ -19,18 +25,19 @@
                         <?php endforeach;?>
                     </select>
                     <button type="submit" form="filter">Показать</button>
+                    <input type="hidden" name="component" value="logviewer" />
                 </form>
-                <a href="?action=form"/>Добавить запись</a>
+                <a href="index.php?component=logviewer&action=form"/>Добавить запись</a>
             </td>
         </tr>
         <tr>
             <td>
-                <a href="/?order=ts&orderby=<?php echo ($orderby == "ASC") ? "DESC": "ASC";?>">
+                <a href="<?=$url;?>&order=ts&orderby=<?php echo ($orderby == "ASC") ? "DESC": "ASC";?>">
                     Дата <?php echo ($order == 'ts') ? $hrow : "";?>
                 </a>
             </td>
             <td>
-                <a href="/?order=type&orderby=<?php echo ($orderby == "ASC") ? "DESC": "ASC";?>">
+                <a href="<?=$url;?>&order=type&orderby=<?php echo ($orderby == "ASC") ? "DESC": "ASC";?>">
                     Тип <?php echo ($order == 'type') ? $hrow : "";?>
                 </a>
             </td>
@@ -50,14 +57,8 @@
     </tbody>
     <tr>
         <td colspan="3" align="center">
-            <?php
-            $url = "/?order=" . $order."&orderby=" . $orderby;
-            foreach ($filters as $key => $val) {
-                $url .= "&filters[" . $key . "]=" . $val;
-            }
-            ?>
             <?php for($i = 0;$i*$limit < $count;$i++) : ?>
-                <a href="<?=$url;?>&start=<?=$i*$limit;?>"><?=($i+1);?></a>
+                <a href="<?=$url;?>&order=<?=$order?>&orderby=<?=$orderby?>&start=<?=$i*$limit;?>"><?=($i+1);?></a>
             <?php endfor;?>
         </td>
 
