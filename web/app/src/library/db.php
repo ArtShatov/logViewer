@@ -1,6 +1,6 @@
 <?php
 class DB {
-
+    //TODO сделать адаптер для коннекта с базой, чтобы можно было менять движок
     private $connector = null;
 
     public function __construct($host , $user ,  $pass , $database) {

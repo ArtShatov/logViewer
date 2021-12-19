@@ -1,11 +1,14 @@
 <?php
 require_once '../app/config.php';
+require_once '../app/src/library/session.php';
 require_once '../app/src/library/db.php';
 require_once '../app/src/library/template.php';
 require_once '../app/src/library/request.php';
 
 $db = new DB(DB_HOST , DB_USER , DB_PASSWORD , DB_DATABASE);
 $request = new Request();
+$session = new Session();
+
 
 //Ищем установленные компоненты
 $availableComponents  = scandir('../app/src/components/');
@@ -49,7 +52,8 @@ if (!class_exists($ControllerClassName)) {
 
 $controller = new $ControllerClassName([
     'model'  => $model,
-    'request' => $request
+    'request' => $request,
+    'session' => $session
 ]);
 
 $controller->$action();
