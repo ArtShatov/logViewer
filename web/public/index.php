@@ -16,7 +16,7 @@ foreach ($availableComponents as $index => $value) {
 }
 
 $component = ((isset($request->get['component']) and ($request->get['component'] !=='')) ? $request->get['component'] : DEFAULT_COMPONENT);
-$action = ((isset($request->get['action']) and ($request->get['action'] !=='')) ? $request->get['action'] : 'index');
+$action = ((isset($request->get['action']) and ($request->get['action'] !=='')) ? $request->get['action'] : DEFAUTL_ACTION );
 
 if (!in_array($component , $availableComponents)) {
     $component = 'error';
@@ -36,11 +36,10 @@ if (file_exists($modelFileName)) {
 }
 
 $controllerFileName = '../app/src/components/' . $component . '/controller.php';
-
-require_once $controllerFileName;
 if (!file_exists($controllerFileName)) {
     die('Error: Could not load controller: ' . $controllerFileName);
 }
+require_once $controllerFileName;
 
 $ControllerClassName = $component . 'Controller';
 

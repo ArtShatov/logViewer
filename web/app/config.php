@@ -1,6 +1,7 @@
 <?php
-define('DB_HOST' , 'mysql');
-define('DB_USER' , 'dev');
-define('DB_PASSWORD' , 'dev');
-define('DB_DATABASE' , 'logviewer');
-define('DEFAULT_COMPONENT' , 'logviewer');
+const DB_HOST = 'mysql';
+const DB_USER = 'dev';
+const DB_PASSWORD =  'dev';
+const DB_DATABASE = 'logviewer';
+const DEFAULT_COMPONENT = 'index';
+const DEFAUTL_ACTION = 'index';
